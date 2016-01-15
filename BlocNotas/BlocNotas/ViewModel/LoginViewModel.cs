@@ -29,9 +29,16 @@ namespace BlocNotas.ViewModel
         public LoginViewModel(INavigator navigator, IServicioDatos servicio) : base(navigator, servicio)
         {
             CmdLogin = new Command(IniciarSesion);
-            CmdAlta = new Command(() =>
+            CmdAlta = new Command(NuevoUsuario);
+            
+        }
+
+        private async void NuevoUsuario()
+        {
+            //await _navigator.PopToRootAsync();
+            await _navigator.PushModalAsync<RegistroViewModel>(viewModel =>
             {
-                //new Registro();
+                Titulo = "Nuevo usuario";
             });
         }
 
@@ -42,12 +49,20 @@ namespace BlocNotas.ViewModel
                 IsBusy = true;
                 var us = await _servicio.ValidarUsuario(_login);
 
-                //TODO: aquí navegaríamos a la pantalla principal o daríamos error
-            }
-            catch (Exception)
-            {
+                if (us != null)
+                {
+                    await _navigator.PopToRootAsync();
+                    await _navigator.PushAsync<PrincipalViewModel>(viewModel =>
+                    {
+                        Titulo = "Inicio de sesión";
+                    });
+                }
+                else
+                {
+                    var xx = ""; //para comprobar que se haga bien.
+                }
 
-                throw;
+                //TODO: aquí navegaríamos a la pantalla principal o daríamos error
             }
             finally
             {

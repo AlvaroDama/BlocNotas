@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using BlocNotas.Module;
+using Xamarin.Forms;
 
 namespace BlocNotas
 {
@@ -7,19 +8,8 @@ namespace BlocNotas
         public App()
         {
             // The root page of your application
-            MainPage = new ContentPage
-            {
-                Content = new StackLayout
-                {
-                    VerticalOptions = LayoutOptions.Center,
-                    Children = {
-                        new Label {
-                            XAlign = TextAlignment.Center,
-                            Text = "Welcome to Xamarin Forms!"
-                        }
-                    }
-                }
-            };
+            var start = new StartUp(this);
+            start.Run();
         }
 
         protected override void OnStart()
