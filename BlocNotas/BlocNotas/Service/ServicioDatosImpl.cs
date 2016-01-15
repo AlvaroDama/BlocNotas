@@ -42,7 +42,7 @@ namespace BlocNotas.Service
             {
                 await tabla.InsertAsync(us);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new Exception("Error al dar de alta.");
             }

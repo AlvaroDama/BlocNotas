@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Input;
 using BlocNotas.Factorias;
 using BlocNotas.Model;
 using BlocNotas.Service;
+using BlocNotas.View;
+using Xamarin.Forms;
 
 namespace BlocNotas.ViewModel
 {
@@ -17,6 +16,9 @@ namespace BlocNotas.ViewModel
         public string TituloRegistro { get { return "Nuevo usuario"; } }
         public string TituloLogin { get { return "Nombre de usuario"; } }
         public string TituloPassword { get { return "Contraseña"; } }
+
+        public ICommand CmdLogin { get; set; }
+        public ICommand CmdAlta { get; set; }
         
         public Usuario Usuario
         {
@@ -26,6 +28,31 @@ namespace BlocNotas.ViewModel
 
         public LoginViewModel(INavigator navigator, IServicioDatos servicio) : base(navigator, servicio)
         {
+            CmdLogin = new Command(IniciarSesion);
+            CmdAlta = new Command(() =>
+            {
+                //new Registro();
+            });
+        }
+
+        private async void IniciarSesion()
+        {
+            try
+            {
+                IsBusy = true;
+                var us = await _servicio.ValidarUsuario(_login);
+
+                //TODO: aquí navegaríamos a la pantalla principal o daríamos error
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
     }
 }

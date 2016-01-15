@@ -9,8 +9,8 @@
     <Label Text="{Binding TituloPassword}"></Label>
     <Entry Text="{Binding Usuario.Password}"></Entry>
     <StackLayout Orientation="Horizontal">
-      <Button Text="{Binding TituloIniciar}"></Button>
-      <Button Text="{Binding TituloRegistro}"></Button>
+      <Button Text="{Binding TituloIniciar}" Command="{Binding CmdLogin}"></Button>
+      <Button Text="{Binding TituloRegistro}" Command="{Binding CmdAlta}"></Button>
     </StackLayout>
   </StackLayout>
   
