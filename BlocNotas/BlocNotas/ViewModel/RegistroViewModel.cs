@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using System.Windows.Input;
 using BlocNotas.Factorias;
 using BlocNotas.Model;
 using BlocNotas.Service;
+using BlocNotas.Util;
 using Xamarin.Forms;
 
 namespace BlocNotas.ViewModel
@@ -21,27 +23,37 @@ namespace BlocNotas.ViewModel
             set{SetProperty(ref _usuario, value);}
         }
 
-        private Usuario _usuario;
+        private Usuario _usuario = new Usuario();
 
-        public RegistroViewModel(INavigator navigator, IServicioDatos servicio) : base(navigator, servicio)
+        public RegistroViewModel(INavigator navigator, IServicioDatos servicio, Session session) : base(navigator, servicio, session)
         {
             CmdAlta = new Command(GuardarUsuario);
         }
 
         private async void GuardarUsuario()
         {
+            _usuario.Avatar = "";
             try
             {
                 IsBusy = true;
                 var r = await _servicio.AddUsuario(_usuario);
                 if (r != null)
                 {
-                    await _navigator.PushModalAsync<PrincipalViewModel>();
+                    Session["usuario"] = r;
+                    await _navigator.PushAsync<PrincipalViewModel>(viewModel =>
+                    {
+                        viewModel.Titulo = "Mis blocs";
+                        viewModel.Blocs = new ObservableCollection<Bloc>();
+                    });
                 }
                 else
                 {
                     var a = "";
                 }
+            }
+            catch (Exception e)
+            {
+                await new Page().DisplayAlert("Error", e.Message, "Aceptar");
             }
             finally
             {

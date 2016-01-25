@@ -41,7 +41,7 @@ namespace BlocNotas.Factorias
             var tipoVista = _map[typeof (TViewModel)];
             var vista = _componentContext.Resolve(tipoVista) as Page;
 
-            if (action == null)
+            if (action != null)
                 viewModel.SetState(action);
 
             vista.BindingContext = viewModel;

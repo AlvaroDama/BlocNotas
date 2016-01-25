@@ -31,6 +31,7 @@ namespace BlocNotas.Module
             viewFactory.Register<LoginViewModel, Login>();
             viewFactory.Register<PrincipalViewModel, Principal>();
             viewFactory.Register<RegistroViewModel, Registro>();
+            viewFactory.Register<NuevoBlocViewModel, NuevoBloc>();
         }
 
         protected override void ConfigureApplication(IContainer container)

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Autofac;
 using BlocNotas.Factorias;
 using BlocNotas.Service;
+using BlocNotas.Util;
 using BlocNotas.View;
 using BlocNotas.ViewModel;
 using Xamarin.Forms;
@@ -17,6 +18,7 @@ namespace BlocNotas.Module
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<ServicioDatosImpl>().As<IServicioDatos>().SingleInstance();
+            builder.RegisterType<Session>().SingleInstance();
 
             builder.RegisterType<Login>();
             builder.RegisterType<LoginViewModel>();
@@ -26,6 +28,10 @@ namespace BlocNotas.Module
 
             builder.RegisterType<Registro>();
             builder.RegisterType<RegistroViewModel>();
+
+            builder.RegisterType<NuevoBloc>();
+            builder.RegisterType<NuevoBlocViewModel>();
+            
 
             builder.RegisterInstance<Func<Page>>(() =>
             {

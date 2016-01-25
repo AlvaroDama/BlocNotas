@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using BlocNotas.Factorias;
 using BlocNotas.Model;
 using BlocNotas.Service;
+using BlocNotas.Util;
 using BlocNotas.View;
 using Xamarin.Forms;
 
@@ -26,19 +28,19 @@ namespace BlocNotas.ViewModel
             set { SetProperty(ref _login, value); }
         }
 
-        public LoginViewModel(INavigator navigator, IServicioDatos servicio) : base(navigator, servicio)
+        public LoginViewModel(INavigator navigator, IServicioDatos servicio, Session session) : base(navigator, servicio, session)
         {
             CmdLogin = new Command(IniciarSesion);
             CmdAlta = new Command(NuevoUsuario);
-            
+            Titulo = "Bloc de Notas";
         }
 
         private async void NuevoUsuario()
         {
-            //await _navigator.PopToRootAsync();
-            await _navigator.PushModalAsync<RegistroViewModel>(viewModel =>
+            await _navigator.PopToRootAsync();
+            await _navigator.PushAsync<RegistroViewModel>(viewModel =>
             {
-                Titulo = "Nuevo usuario";
+                viewModel.Titulo = "Nuevo usuario";
             });
         }
 
@@ -51,10 +53,14 @@ namespace BlocNotas.ViewModel
 
                 if (us != null)
                 {
+                    Session["usuario"] = us;
+                    var blocs = await _servicio.GetBlocs(us.Id);
+
                     await _navigator.PopToRootAsync();
                     await _navigator.PushAsync<PrincipalViewModel>(viewModel =>
                     {
-                        Titulo = "Inicio de sesión";
+                        viewModel.Titulo = "Mis blocs";
+                        viewModel.Blocs = new ObservableCollection<Bloc>(blocs);
                     });
                 }
                 else
@@ -63,6 +69,10 @@ namespace BlocNotas.ViewModel
                 }
 
                 //TODO: aquí navegaríamos a la pantalla principal o daríamos error
+            }
+            catch (Exception e)
+            {
+                await new Page().DisplayAlert("Error", e.Message, "Aceptar");
             }
             finally
             {

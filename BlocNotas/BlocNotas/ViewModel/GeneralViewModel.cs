@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BlocNotas.Factorias;
 using BlocNotas.Service;
+using BlocNotas.Util;
 using BlocNotas.ViewModel.Base;
 using Xamarin.Forms;
 
@@ -14,11 +15,14 @@ namespace BlocNotas.ViewModel
     {
         protected INavigator _navigator;
         protected IServicioDatos _servicio;
+        protected Session Session { get; set; }
 
-        public GeneralViewModel(INavigator navigator, IServicioDatos servicio)
+
+        public GeneralViewModel(INavigator navigator, IServicioDatos servicio, Session session)
         {
             _servicio = servicio;
             _navigator = navigator;
+            Session = session;
         }
     }
 }
